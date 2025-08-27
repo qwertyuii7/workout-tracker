@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, CssBaseline, AppBar, Toolbar, Typography, Drawer, Button } from "@mui/material";
+import { Box, CssBaseline, AppBar, Toolbar, Typography, Drawer, Button, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import WorkoutForm from "./components/WorkoutForm";
 import WorkoutsList from "./components/WorkoutsList";
@@ -24,50 +24,56 @@ export default function App() {
     localStorage.setItem("workouts", JSON.stringify(workouts));
   }, [workouts]);
 
-  function addWorkout(w) {
-    setWorkouts((prev) => [{ ...w, id: Date.now() }, ...prev]);
-  }
-
-  function removeWorkout(id) {
-    setWorkouts((prev) => prev.filter((p) => p.id !== id));
-  }
+  const addWorkout = (w) => setWorkouts(prev => [{ ...w, id: Date.now() }, ...prev]);
+  const removeWorkout = (id) => setWorkouts(prev => prev.filter(p => p.id !== id));
 
   return (
     <Box sx={{ display: "flex", height: "100vh" }}>
       <CssBaseline />
-      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, background: "linear-gradient(90deg,#4c1d95,#7c3aed)" }}>
+      <AppBar position="fixed" sx={{ zIndex: theme => theme.zIndex.drawer + 1, background: "linear-gradient(90deg,#4c1d95,#7c3aed)" }}>
         <Toolbar>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <IconButton edge="start" color="inherit" sx={{ mr: 2 }}>
             <MenuIcon />
-            <Typography variant="h6" noWrap>FitTrack</Typography>
-          </Box>
+          </IconButton>
+          <Typography variant="h6" noWrap>FitTrack Pro</Typography>
         </Toolbar>
       </AppBar>
 
-      <Drawer variant="permanent" sx={{
-        width: drawerWidth,
-        '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box', background: '#0b1220', color: '#fff' }
-      }}>
+      <Drawer
+        variant="permanent"
+        sx={{
+          width: drawerWidth,
+          display: { xs: "none", md: "block" },
+          '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box', background: '#0b1220', color: '#fff' }
+        }}
+        open
+      >
         <Toolbar />
-        <Box sx={{ p: 2 }}>
-          <Typography variant="h5">Menu</Typography>
-          <Box sx={{ mt: 2 }}>
-            <Button fullWidth sx={{ my: 1 }} variant="contained">Dashboard</Button>
-            <Button fullWidth sx={{ my: 1 }} variant="text" color="info">Workouts</Button>
-          </Box>
+        <Box sx={{ p: 3 }}>
+          <Typography variant="h5" sx={{ mb: 2 }}>Menu</Typography>
+          <Button fullWidth sx={{ my: 1 }} variant="contained">Dashboard</Button>
+          <Button fullWidth sx={{ my: 1 }} variant="outlined" color="info">Workouts</Button>
         </Box>
       </Drawer>
 
-      <Box component="main" sx={{ flexGrow: 1, p: 3, overflow: "auto" }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, overflow: "auto", ml: { md: `${drawerWidth}px` } }}>
         <Toolbar />
-        <Box sx={{ display: "flex", gap: 3 }}>
+        <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: 3, alignItems: "stretch" }}>
           <Box sx={{ flex: 1 }}>
-            <Typography variant="h4" sx={{ mb: 2 }}>Dashboard</Typography>
+            <Typography variant="h4" sx={{ mb: 3 }}>Dashboard</Typography>
             <WorkoutForm onAdd={addWorkout} />
             <WorkoutsList workouts={workouts} onDelete={removeWorkout} />
           </Box>
 
-          <Box sx={{ width: 420, height: 420, borderRadius: 2, overflow: "hidden", boxShadow: 3 }}>
+          <Box sx={{
+            width: { xs: "100%", md: 420 },
+            height: { xs: 300, md: 420 },
+            borderRadius: 2,
+            overflow: "hidden",
+            boxShadow: 4,
+            mt: { xs: 3, md: 0 },
+            alignSelf: { xs: "center", md: "flex-start" }
+          }}>
             <ThreeDScene />
           </Box>
         </Box>
