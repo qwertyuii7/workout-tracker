@@ -1,75 +1,217 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Workout Tracker 3D UI</title>
   <link href="https://fonts.googleapis.com/css?family=Orbitron:700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
   <style>
     body {
-      margin: 0;
-      min-height: 100vh;
-      background: linear-gradient(135deg, #232526 0%, #414345 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
       font-family: 'Orbitron', Arial, sans-serif;
+      background: linear-gradient(135deg, #181c2b 0%, #232946 100%);
+      min-height: 100vh;
       overflow-x: hidden;
     }
-    .container {
-      perspective: 1200px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-width: 320px;
-      width: 90vw;
-      max-width: 400px;
-      min-height: 350px;
-      background: rgba(34, 40, 49, 0.95);
-      border-radius: 30px;
-      box-shadow: 0 12px 40px 0 rgba(0,0,0,0.4), 0 1.5px 0 0 #00ffe7;
+    .neon {
+      text-shadow: 0 0 8px #00ffe7, 0 0 16px #00ffe7, 0 0 32px #00ffe7;
+    }
+    .glass {
+      background: rgba(34, 40, 49, 0.85);
+      backdrop-filter: blur(8px);
+      border-radius: 1.5rem;
+      box-shadow: 0 8px 32px 0 #00ffe733, 0 1.5px 0 0 #00ffe7;
+      border: 1.5px solid #00ffe7;
+      transition: transform 0.3s, box-shadow 0.3s;
       transform-style: preserve-3d;
-      transition: box-shadow 0.3s, transform 0.3s;
     }
-    .container:hover {
-      box-shadow: 0 24px 80px 0 #00ffe7, 0 1.5px 0 0 #00ffe7;
-      transform: rotateY(8deg) scale(1.03);
+    .glass:hover {
+      box-shadow: 0 16px 48px 0 #00ffe7, 0 1.5px 0 0 #00ffe7;
+      transform: rotateY(6deg) scale(1.03);
     }
-    h1 {
-      color: #00ffe7;
-      font-size: 2.2rem;
-      margin: 32px 0 12px 0;
-      letter-spacing: 2px;
-      text-shadow: 0 2px 16px #00ffe7, 0 1px 0 #232526;
-      transform: translateZ(30px);
+    .icon-3d {
+      filter: drop-shadow(0 0 8px #00ffe7) drop-shadow(0 0 16px #00ffe7);
+      animation: float 2.5s ease-in-out infinite alternate;
+      will-change: transform;
     }
-    p {
-      color: #fff;
-      font-size: 1.1rem;
-      margin: 0 0 32px 0;
-      text-align: center;
-      text-shadow: 0 1px 8px #00ffe744, 0 1px 0 #232526;
-      transform: translateZ(15px);
+    @keyframes float {
+      0% { transform: translateY(0) rotateY(0deg);}
+      100% { transform: translateY(-12px) rotateY(12deg);}
     }
-    @media (max-width: 600px) {
-      .container {
-        width: 98vw;
-        min-height: 220px;
-        padding: 0 8px;
-      }
-      h1 {
-        font-size: 1.3rem;
-      }
-      p {
-        font-size: 0.95rem;
-      }
+    .btn-neon {
+      background: linear-gradient(90deg, #00ffe7 0%, #00bfff 100%);
+      color: #181c2b;
+      font-weight: bold;
+      border-radius: 0.75rem;
+      box-shadow: 0 0 12px #00ffe7;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+    }
+    .btn-neon:hover {
+      background: linear-gradient(90deg, #00bfff 0%, #00ffe7 100%);
+      box-shadow: 0 0 24px #00ffe7;
+      transform: scale(1.05);
+    }
+    /* Chart.js dark theme overrides */
+    .chartjs-render-monitor {
+      background: transparent !important;
     }
   </style>
 </head>
-<body>
-  <div class="container">
-    <h1>Hello from Frontend Branch</h1>
-    <p>This is my first branch commit!</p>
+<body class="flex flex-col min-h-screen">
+  <div class="w-full py-6 px-2 bg-gradient-to-r from-[#00ffe7] via-[#232946] to-[#00bfff] shadow-lg">
+    <div class="max-w-5xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <svg class="icon-3d" width="40" height="40" fill="none" viewBox="0 0 48 48">
+          <circle cx="24" cy="24" r="22" stroke="#00ffe7" stroke-width="3" fill="#232946"/>
+          <rect x="18" y="12" width="12" height="24" rx="6" fill="#00ffe7" opacity="0.8"/>
+          <rect x="22" y="8" width="4" height="8" rx="2" fill="#00bfff"/>
+        </svg>
+        <span class="text-2xl font-bold neon tracking-widest">Workout Tracker</span>
+      </div>
+      <button class="btn-neon px-4 py-2 text-sm">Sign In</button>
+    </div>
   </div>
+  <main class="flex-1 flex flex-col md:flex-row gap-8 max-w-5xl mx-auto w-full px-2 py-8">
+    <!-- Workout Log -->
+    <section class="glass flex-1 p-6 flex flex-col mb-6 md:mb-0 shadow-lg">
+      <div class="flex items-center gap-2 mb-4">
+        <svg class="icon-3d" width="28" height="28" fill="none" viewBox="0 0 28 28">
+          <rect x="2" y="8" width="24" height="12" rx="6" fill="#00ffe7" opacity="0.7"/>
+          <rect x="8" y="2" width="12" height="24" rx="6" fill="#00bfff" opacity="0.5"/>
+        </svg>
+        <h2 class="text-xl neon font-semibold">Workout Log</h2>
+      </div>
+      <ul id="workout-list" class="flex-1 overflow-y-auto space-y-3">
+        <!-- Workouts will be rendered here -->
+      </ul>
+    </section>
+    <!-- Progress Tracker -->
+    <section class="glass flex-1 p-6 flex flex-col shadow-lg">
+      <div class="flex items-center gap-2 mb-4">
+        <svg class="icon-3d" width="28" height="28" fill="none" viewBox="0 0 28 28">
+          <path d="M4 24V14M12 24V8M20 24V4" stroke="#00ffe7" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <h2 class="text-xl neon font-semibold">Progress Tracker</h2>
+      </div>
+      <canvas id="progress-chart" height="180"></canvas>
+    </section>
+    <!-- Add Workout Form -->
+    <section class="glass flex-1 p-6 flex flex-col shadow-lg">
+      <div class="flex items-center gap-2 mb-4">
+        <svg class="icon-3d" width="28" height="28" fill="none" viewBox="0 0 28 28">
+          <circle cx="14" cy="14" r="12" stroke="#00ffe7" stroke-width="3"/>
+          <rect x="13" y="7" width="2" height="10" rx="1" fill="#00ffe7"/>
+          <rect x="7" y="13" width="10" height="2" rx="1" fill="#00ffe7"/>
+        </svg>
+        <h2 class="text-xl neon font-semibold">Add Workout</h2>
+      </div>
+      <form id="add-workout-form" class="flex flex-col gap-3">
+        <input required name="date" type="date" class="bg-[#232946] border border-[#00ffe7] rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-[#00ffe7] transition" />
+        <input required name="exercise" type="text" placeholder="Exercise (e.g. Squat)" class="bg-[#232946] border border-[#00ffe7] rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-[#00ffe7] transition" />
+        <input required name="sets" type="number" min="1" placeholder="Sets" class="bg-[#232946] border border-[#00ffe7] rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-[#00ffe7] transition" />
+        <input required name="reps" type="number" min="1" placeholder="Reps" class="bg-[#232946] border border-[#00ffe7] rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-[#00ffe7] transition" />
+        <input name="duration" type="number" min="1" placeholder="Duration (min)" class="bg-[#232946] border border-[#00ffe7] rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-[#00ffe7] transition" />
+        <button type="submit" class="btn-neon px-4 py-2 mt-2">Add Workout</button>
+      </form>
+    </section>
+  </main>
+  <footer class="w-full py-4 text-center text-[#00ffe7] bg-[#232946] neon text-xs tracking-widest">
+    &copy; 2025 Workout Tracker &mdash; Futuristic UI by GitHub Copilot
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // --- Demo Data ---
+    let workouts = [
+      { date: '2025-08-25', exercise: 'Squat', sets: 4, reps: 10, duration: 30 },
+      { date: '2025-08-26', exercise: 'Bench Press', sets: 3, reps: 8, duration: 25 },
+      { date: '2025-08-27', exercise: 'Deadlift', sets: 5, reps: 5, duration: 40 }
+    ];
+
+    // --- Render Workout Log ---
+    function renderWorkouts() {
+      const list = document.getElementById('workout-list');
+      list.innerHTML = '';
+      if (workouts.length === 0) {
+        list.innerHTML = '<li class="text-[#00ffe7] text-center">No workouts yet.</li>';
+        return;
+      }
+      workouts.slice().reverse().forEach(w => {
+        const li = document.createElement('li');
+        li.className = 'glass p-4 flex flex-col gap-1 neon hover:scale-105 transition cursor-pointer';
+        li.innerHTML = `
+          <div class="flex justify-between items-center">
+            <span class="font-bold">${w.exercise}</span>
+            <span class="text-xs text-[#00ffe7]">${w.date}</span>
+          </div>
+          <div class="flex gap-4 text-sm">
+            <span>Sets: <b>${w.sets}</b></span>
+            <span>Reps: <b>${w.reps}</b></span>
+            <span>Time: <b>${w.duration || '-'} min</b></span>
+          </div>
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    // --- Add Workout Form ---
+    document.getElementById('add-workout-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const workout = {
+        date: fd.get('date'),
+        exercise: fd.get('exercise'),
+        sets: Number(fd.get('sets')),
+        reps: Number(fd.get('reps')),
+        duration: Number(fd.get('duration')) || null
+      };
+      workouts.push(workout);
+      renderWorkouts();
+      renderChart();
+      e.target.reset();
+    });
+
+    // --- Progress Chart ---
+    let chart;
+    function renderChart() {
+      const ctx = document.getElementById('progress-chart').getContext('2d');
+      const dataByDate = {};
+      workouts.forEach(w => {
+        if (!dataByDate[w.date]) dataByDate[w.date] = 0;
+        dataByDate[w.date] += w.sets * w.reps;
+      });
+      const labels = Object.keys(dataByDate).sort();
+      const data = labels.map(d => dataByDate[d]);
+      if (chart) chart.destroy();
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Total Volume',
+            data,
+            borderColor: '#00ffe7',
+            backgroundColor: 'rgba(0,255,231,0.15)',
+            pointBackgroundColor: '#00ffe7',
+            pointBorderColor: '#00bfff',
+            tension: 0.4,
+            fill: true
+          }]
+        },
+        options: {
+          plugins: {
+            legend: { labels: { color: '#00ffe7', font: { family: 'Orbitron' } } }
+          },
+          scales: {
+            x: { ticks: { color: '#00ffe7' }, grid: { color: '#232946' } },
+            y: { ticks: { color: '#00ffe7' }, grid: { color: '#232946' } }
+          }
+        }
+      });
+    }
+
+    // --- Initial Render ---
+    renderWorkouts();
+    renderChart();
+  </script>
 </body>
+</html>
